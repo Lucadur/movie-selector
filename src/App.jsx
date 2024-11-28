@@ -10,11 +10,11 @@ function App() {
     <div style={{ padding: '50px' }}>
     <MovieCarousel 
       title="Films en salle"
-      apiEndpoint="https://api.themoviedb.org/3/movie/now_playing?language=fr-FR&page=1"
+      apiEndpoint="https://api.themoviedb.org/3/movie/now_playing?language=fr-FR&page=2"
     />
     <MovieCarousel 
       title="Films populaires"
-      apiEndpoint="https://api.themoviedb.org/3/movie/popular?language=fr-FR&page=2"
+      apiEndpoint="https://api.themoviedb.org/3/movie/popular?language=fr-FR&page=6"
     />
     <MovieCarousel 
       title="Films les mieux nôtés"

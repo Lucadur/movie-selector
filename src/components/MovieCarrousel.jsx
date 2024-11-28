@@ -12,11 +12,12 @@ import MovieCard from './MovieCard';
 const MovieCarousel = ({ title, apiEndpoint, isFavorites }) => {
   const [movies, setMovies] = useState([]);
   const favorites = useSelector((state) => state.favorites); 
-  const apiKey = import.meta.env.VITE_API_KEY
+  
 
   const moviesToDisplay = isFavorites ? favorites : movies;
 
   useEffect(() => {
+    const apiKey = import.meta.env.VITE_API_KEY
     if (!isFavorites && apiEndpoint) {
       const fetchMovies = async () => {
         try {
