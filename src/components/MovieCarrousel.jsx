@@ -12,6 +12,7 @@ import MovieCard from './MovieCard';
 const MovieCarousel = ({ title, apiEndpoint, isFavorites }) => {
   const [movies, setMovies] = useState([]);
   const favorites = useSelector((state) => state.favorites); 
+  const apiKey = import.meta.env.VITE_API_KEY
 
   const moviesToDisplay = isFavorites ? favorites : movies;
 
@@ -23,7 +24,7 @@ const MovieCarousel = ({ title, apiEndpoint, isFavorites }) => {
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZmJkMmY1ODcwNmY3ZTg2NDc0MDRhM2ZkZThhZTZiZCIsIm5iZiI6MTczMjUzMDY1NC44MzA4MjcyLCJzdWIiOiI2NzQ0NTEwMDlmNDBhN2FhZjZlYTU2YTciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.70dHYC1i8K1oaLjaos_dtHFHQu4IPJ-qp3FAo-44vKI', // Remplace avec ta clé API
+              Authorization: `Bearer ${apiKey}`,
             },
           };
 
