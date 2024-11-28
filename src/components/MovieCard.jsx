@@ -1,63 +1,98 @@
 import { useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import MovieModal from './MovieModal'; // Importer le composant de la modale
+import ReactCardFlip from 'react-card-flip';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, removeFavorite } from '../redux/favoritesSlice';
 
 /* eslint-disable react/prop-types */
-const MovieCard = ({ title, posterPath, releaseDate, movieId, movieDetails }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const MovieCard = ({ title, posterPath, releaseDate, movieId, overview, voteaverage, votecount }) => {
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites);  // Récupérer la liste des favoris depuis Redux
 
-  // Ouvrir la modale
-  const openModal = () => {
-    setIsModalOpen(true);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Vérifier si ce film est dans la liste des favoris
+  const isFavorite = favorites.some(movie => movie.id === movieId);
+
+  const handleFlip = () => {
+    setIsFlipped(!isFlipped);
   };
 
-  // Fermer la modale
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const toggleFavorite = () => {
-    const favoriteMovies = JSON.parse(localStorage.getItem('favorites')) || [];
-    const movie = { title, posterPath, releaseDate, id: movieId };
-
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();  // Empêche la carte de se retourner lors du clic sur le cœur
     if (isFavorite) {
-      // Retirer des favoris
-      const updatedFavorites = favoriteMovies.filter((movie) => movie.id !== movieId);
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      setIsFavorite(false);
+      dispatch(removeFavorite({ id: movieId }));  // Retirer du favoris si déjà favori
     } else {
-      // Ajouter aux favoris
-      favoriteMovies.push(movie);
-      localStorage.setItem('favorites', JSON.stringify(favoriteMovies));
-      setIsFavorite(true);
+      // Ajouter aux favoris si pas encore présent
+      dispatch(addFavorite({ 
+        id: movieId,
+        title,
+        posterPath,
+        releaseDate,
+        overview,
+        voteaverage,
+        votecount
+      }));
     }
   };
 
   return (
-    <div className="max-w-xs rounded overflow-hidden shadow-lg bg-gray-800 max-h-xs text-white relative flex-auto h-5/6 mb-10">
-      <img
-        className="w-full cursor-pointer"
-        src={`https://image.tmdb.org/t/p/w500${posterPath}`}
-        alt={title}
-        style={{ height: '350px', width: '300px', objectFit: 'cover' }}
-        onClick={openModal} // Ouvre la modale au clic
-      />
-      <div className="px-6 py-4 h-32">
-        <h3 className="font-semibold text-xl">{title}</h3>
-        <div className="flex flex-row justify-between align-middle">
-          {releaseDate && <p className="text-gray-400">{releaseDate}</p>}
-          <button className="text-2xl" onClick={toggleFavorite}>
-            {isFavorite ? <FaHeart className="text-emerald-200" /> : <FaRegHeart className="text-white" />}
-          </button>
+    <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+      {/* Front of the card */}
+      <div
+        className="max-w-xs rounded overflow-hidden shadow-lg bg-gray-800 text-white relative flex-auto mb-10 cursor-pointer"
+        onClick={handleFlip}
+        style={{ width: '300px', height: '450px' }}
+      >
+        <img
+          className="w-full"
+          src={`https://image.tmdb.org/t/p/w500${posterPath}`}
+          alt={title}
+          style={{ height: '340px', width: '100%', objectFit: 'fill' }}
+        />
+        <div className="px-6 py-4">
+          <h3 className="font-semibold text-xl">{title}</h3>
+          <div className="flex flex-row justify-between align-middle">
+            {releaseDate && <p className="text-gray-400">{releaseDate}</p>}
+            <button
+              className="text-2xl"
+              onClick={handleFavoriteClick}
+            >
+              {isFavorite ? <FaHeart className="text-emerald-200" /> : <FaRegHeart className="text-white" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Afficher la modale quand isModalOpen est vrai */}
-      {isModalOpen && movieDetails && (
-        <MovieModal movie={movieDetails} closeModal={closeModal} />
-      )}
-    </div>
+      {/* Back of the card */}
+      <div
+        className="max-w-xs rounded overflow-hidden shadow-lg bg-gray-900 text-white relative flex-auto mb-10 p-4 cursor-pointer border-2 border-teal-200"
+        onClick={handleFlip}
+        style={{ width: '300px', height: '450px' }}
+      >
+        <div>
+          <h3 className="font-bold text-xl mb-2">{title}</h3>
+          <p className="text-gray-300 text-base overflow-y-auto mb-12" style={{ maxHeight: '300px' }}>
+            {overview || 'Résumé indisponible.'}
+          </p>
+          <p className="text-gray-300 text-sm overflow-y-auto font-bold" style={{ maxHeight: '300px' }}>
+            Note globale : {voteaverage} / 10
+          </p>
+          <p className="text-gray-300 text-sm overflow-y-auto font-bold" style={{ maxHeight: '300px' }}>
+            Nombre de votes : {votecount}
+          </p>
+        </div>
+        <button
+          className="mt-4 text-emerald-400 underline self-end"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsFlipped(false);
+          }}
+        >
+          Retour
+        </button>
+      </div>
+    </ReactCardFlip>
   );
 };
 

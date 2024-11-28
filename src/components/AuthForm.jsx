@@ -25,7 +25,7 @@ const AuthModal = () => {
 
 
     return (
-        <div>
+        <div className='flex flex-col w-full h-full'>
         {user ? (
           <div>
             <h2>Bienvenue, {user.email}</h2>

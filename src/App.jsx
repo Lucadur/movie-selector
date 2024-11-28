@@ -1,7 +1,6 @@
 
 import NavBar from './components/NavBar';
 import MovieCarousel from './components/MovieCarrousel';
-import FavoritesMoviesCarousel from './components/FavoritesMovieCarrousel';
 import "./App.css"
 
 
@@ -22,7 +21,10 @@ function App() {
       title="Films les mieux nôtés"
       apiEndpoint="https://api.themoviedb.org/3/movie/top_rated?language=fr-FR&page=1"
     />
-     <FavoritesMoviesCarousel />
+    <MovieCarousel 
+      title="Films favoris"
+     isFavorites={true}
+    />
     </div>
     </div>
   );

@@ -21,7 +21,7 @@ export default function NavBar() {
               className='m-5'
             />
           </a>
-          <button className="btn text-white m-5 border-solid border-2 border-teal-200 rou" onClick={handleShow}>
+          <button className="btn text-white m-5 border-solid border-2 border-teal-200 rou p-2 rounded-xl" onClick={handleShow}>
             Connexion/Inscription
           </button>
         </div>
