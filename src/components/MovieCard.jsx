@@ -7,11 +7,8 @@ import { addFavorite, removeFavorite } from '../redux/favoritesSlice';
 /* eslint-disable react/prop-types */
 const MovieCard = ({ title, posterPath, releaseDate, movieId, overview, voteaverage, votecount }) => {
   const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.favorites);  // Récupérer la liste des favoris depuis Redux
-
+  const favorites = useSelector((state) => state.favorites);  
   const [isFlipped, setIsFlipped] = useState(false);
-
-  // Vérifier si ce film est dans la liste des favoris
   const isFavorite = favorites.some(movie => movie.id === movieId);
 
   const handleFlip = () => {
@@ -19,11 +16,10 @@ const MovieCard = ({ title, posterPath, releaseDate, movieId, overview, voteaver
   };
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation();  // Empêche la carte de se retourner lors du clic sur le cœur
+    e.stopPropagation();  
     if (isFavorite) {
-      dispatch(removeFavorite({ id: movieId }));  // Retirer du favoris si déjà favori
+      dispatch(removeFavorite({ id: movieId }));  
     } else {
-      // Ajouter aux favoris si pas encore présent
       dispatch(addFavorite({ 
         id: movieId,
         title,

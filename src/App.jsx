@@ -1,4 +1,3 @@
-
 import NavBar from './components/NavBar';
 import MovieCarousel from './components/MovieCarrousel';
 import "./App.css"

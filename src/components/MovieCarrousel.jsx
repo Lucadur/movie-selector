@@ -54,7 +54,7 @@ const MovieCarousel = ({ title, apiEndpoint, isFavorites }) => {
   <SwiperSlide key={`favorite-${movie.id}`}>
     <MovieCard
       title={movie.title}
-      posterPath={movie.poster_path} // Utilise les noms des propriétés comme dans Redux
+      posterPath={movie.poster_path} 
       releaseDate={movie.release_date}
       overview={movie.overview}
       voteaverage={movie.vote_average}
