@@ -1,0 +1,12 @@
+.swiper-pagination-bullet-active {
+  background: turquoise;
+}
+
+.swiper-pagination-bullet {
+  background: turquoise;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: aqua;
+}
