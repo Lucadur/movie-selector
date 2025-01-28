@@ -1,0 +1,23 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ "main" ]
+
+  pull_request:
+    branches: [ "main" ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4.2.2
+        - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3.3.0
+        with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.PAT_GITHUB_PACKAGE_PUBLICATION }}
+        - name: Build and push Docker image
+        run: |
+        docker build -t ghcr.io/$GITHUB_REPOSITORY:latest .
+        docker push ghcr.io/$GITHUB_REPOSITORY:latest
