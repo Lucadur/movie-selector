@@ -1,23 +1,38 @@
 name: Docker Image CI
+
 on:
   push:
     branches: [ "main" ]
-
   pull_request:
     branches: [ "main" ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4.2.2
-        - name: Log in to GitHub Container Registry
+
+    steps:
+      # 1. Checkout du code source
+      - uses: actions/checkout@v4.2.2
+
+      # 2. Connexion à GitHub Container Registry
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3.3.0
         with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.PAT_GITHUB_PACKAGE_PUBLICATION }}
-        - name: Build and push Docker image
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_GITHUB_PACKAGE_PUBLICATION }}
+
+      # 3. Construction et push de l'image Docker avec deux tags
+      - name: Build and push Docker image
         run: |
-        docker build -t ghcr.io/$GITHUB_REPOSITORY:latest .
-        docker push ghcr.io/$GITHUB_REPOSITORY:latest
+          # Définir les variables de tag
+          IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY}
+          TAG_LATEST=latest
+          TAG_SHA=${GITHUB_SHA}
+
+          # Construire l'image avec les deux tags
+          docker build -t $IMAGE_NAME:$TAG_LATEST -t $IMAGE_NAME:$TAG_SHA .
+
+          # Pousser les deux tags vers GHCR
+          docker push $IMAGE_NAME:$TAG_LATEST
+          docker push $IMAGE_NAME:$TAG_SHA
