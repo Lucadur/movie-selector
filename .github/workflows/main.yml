@@ -28,7 +28,7 @@ jobs:
           # Définir les variables de tag
           IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY}
           TAG_LATEST=latest
-          TAG_SHA=${GITHUB_SHA}
+          TAG_SHA=${GITHUB_SHA::7}  # Hash court du commit
 
           # Construire l'image avec les deux tags
           docker build -t $IMAGE_NAME:$TAG_LATEST -t $IMAGE_NAME:$TAG_SHA .
